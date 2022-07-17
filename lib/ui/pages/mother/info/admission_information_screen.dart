@@ -7,6 +7,7 @@ import 'package:partograph/model/mother.dart';
 import 'package:partograph/provider/mother_provider.dart';
 import 'package:partograph/provider/utility_provider.dart';
 import 'package:partograph/ui/widgets/buttons/custom_string_dropdown.dart';
+import 'package:partograph/ui/widgets/partograph_form_ui.dart';
 import 'package:partograph/ui/widgets/text_fields/date_text_field.dart';
 import 'package:partograph/ui/widgets/text_fields/label_text_field.dart';
 import 'package:partograph/ui/widgets/text_fields/time_text_field.dart';
@@ -26,17 +27,13 @@ class _AdmissionInformationScreenState
     extends State<AdmissionInformationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-//private variables;
   String _adimittedFrom = "ANTENATAL WARD";
-
-  ///Focus nodes
 
   final FocusNode _reasonForReferralOrManagementReceivedFocusNode = FocusNode();
   final FocusNode _dangerSignsAndRiskFactorsFocusNode = FocusNode();
   final FocusNode _dateOfAdmissionFocusNode = FocusNode();
   final FocusNode _timeOfAdmissionFocusNode = FocusNode();
 
-  /// Text Editing Controller
   final TextEditingController _timeOfAdmissionTextEditingController =
       TextEditingController();
   final TextEditingController _dateOfAdmissionTextEditingController =
@@ -50,60 +47,63 @@ class _AdmissionInformationScreenState
   final GlobalKey<ScaffoldState> _createPersonalInfoScaffoldKey =
       GlobalKey<ScaffoldState>();
 
+  void save() {
+    final _mother = Provider.of<MotherProvider>(context, listen: false);
+    final _utilityProvider =
+        Provider.of<UtilityProvider>(context, listen: false);
+
+    if (_formKey.currentState!.validate()) {
+      final _admissionInformation = AdmissionInformation(
+        id: 0,
+        dateOfAdmission: _dateOfAdmissionTextEditingController.text,
+        admittingNurseDoctorName: 'Anesia',
+        dangerSignsAndRiskFactors:
+            _dangerSignsAndRiskFactorsTextEditingController.text,
+        hospitalRegNo: 'MH00192',
+        nameOfHealthFacility: 'Muhimbili',
+        adimittedFrom: _adimittedFrom,
+        reasonForReferralOrManagementReceived:
+            _reasonForReferralOrManagementReceivedTextEditingController.text,
+        time: _timeOfAdmissionTextEditingController.text,
+      );
+
+      _mother
+          .postAdmissionInformation(_admissionInformation, widget.mother.id)
+          .then((value) {
+        if (value != null) {
+          _dateOfAdmissionTextEditingController.clear();
+          _dangerSignsAndRiskFactorsTextEditingController.clear();
+          _reasonForReferralOrManagementReceivedTextEditingController.clear();
+
+          //show the snackbar
+          _utilityProvider.showInSnackBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              color: Colors.white,
+              context: context,
+              icon: Icons.check_circle,
+              scaffoldKey: _createPersonalInfoScaffoldKey,
+              title: 'Mother information created sucessfully');
+
+          _utilityProvider.currentIndex = 1;
+          _utilityProvider.setCurrentPageIndex = 1;
+          _utilityProvider.setAdmissionInfoId = value.id;
+        } else {
+          //show the snackbar
+          _utilityProvider.showInSnackBar(
+              color: Colors.red,
+              backgroundColor: Colors.black,
+              context: context,
+              icon: Icons.error,
+              scaffoldKey: _createPersonalInfoScaffoldKey,
+              title: 'Error while submitting creating');
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _mother = Provider.of<MotherProvider>(context);
-    final _utilityProvider = Provider.of<UtilityProvider>(context);
-    void _onSave() {
-      if (_formKey.currentState!.validate()) {
-        final _admissionInformation = AdmissionInformation(
-          id: 0,
-          dateOfAdmission: _dateOfAdmissionTextEditingController.text,
-          admittingNurseDoctorName: 'Anesia',
-          dangerSignsAndRiskFactors:
-              _dangerSignsAndRiskFactorsTextEditingController.text,
-          hospitalRegNo: 'MH00192',
-          nameOfHealthFacility: 'Muhimbili',
-          adimittedFrom: _adimittedFrom,
-          reasonForReferralOrManagementReceived:
-              _reasonForReferralOrManagementReceivedTextEditingController.text,
-          time: _timeOfAdmissionTextEditingController.text,
-        );
-        _mother
-            .postAdmissionInformation(_admissionInformation, widget.mother.id)
-            .then((value) {
-          if (value != null) {
-            _dateOfAdmissionTextEditingController.clear();
-            _dangerSignsAndRiskFactorsTextEditingController.clear();
-            _reasonForReferralOrManagementReceivedTextEditingController.clear();
-
-            //show the snackbar
-            _utilityProvider.showInSnackBar(
-                backgroundColor: Theme.of(context).primaryColor,
-                color: Colors.white,
-                context: context,
-                icon: Icons.check_circle,
-                scaffoldKey: _createPersonalInfoScaffoldKey,
-                title: 'Mother information created sucessfully');
-
-            _utilityProvider.currentIndex = 1;
-            _utilityProvider.setCurrentPageIndex = 1;
-            _utilityProvider.setAdmissionInfoId = value.id;
-          } else {
-            //show the snackbar
-            _utilityProvider.showInSnackBar(
-                color: Colors.red,
-                backgroundColor: Colors.black,
-                context: context,
-                icon: Icons.error,
-                scaffoldKey: _createPersonalInfoScaffoldKey,
-                title: 'Error while submitting creating');
-          }
-        });
-      }
-    }
-
-    return SingleChildScrollView(
+    return PartographFormUi(
       child: Form(
         key: _formKey,
         child: Container(
@@ -142,7 +142,6 @@ class _AdmissionInformationScreenState
                   keyboardType: TextInputType.text,
                 ),
               ),
-              //time
               const SizedBox(
                 height: 10,
               ),
@@ -206,14 +205,15 @@ class _AdmissionInformationScreenState
                               'SAVE',
                               style: TextStyle(color: Colors.white),
                             ),
-                            onPressed: () => _onSave())
+                            onPressed: save,
+                          )
                         : CupertinoButton(
                             color: Theme.of(context).primaryColor,
                             child: const Text(
                               'SAVE',
                               style: TextStyle(color: Colors.white),
                             ),
-                            onPressed: () => _onSave(),
+                            onPressed: save,
                           ),
                   ),
                 ],
@@ -223,5 +223,14 @@ class _AdmissionInformationScreenState
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _timeOfAdmissionTextEditingController.dispose();
+    _dateOfAdmissionTextEditingController.dispose();
+    _reasonForReferralOrManagementReceivedTextEditingController.dispose();
+    _dangerSignsAndRiskFactorsTextEditingController.dispose();
+    super.dispose();
   }
 }

@@ -1,10 +1,8 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:partograph/model/indicator.dart';
-import 'package:partograph/model/obstetric_history.dart';
 
 class UtilityProvider with ChangeNotifier {
-  ///Constructor users
   UtilityProvider();
   List<Indicator> get indicatorList => _indicatorList;
   Country? _country = Country.tryParse("Tanzania");
@@ -14,15 +12,12 @@ class UtilityProvider with ChangeNotifier {
   int _obstetricHistoryId = 0;
 
   final _controller = PageController();
-
-//getters
   PageController get controller => _controller;
   int get admissionInfoId => _admissionInfoId;
   int get obstetricHistoryId => _obstetricHistoryId;
   Country? get selectedCountry => _country;
   int get currentIndex => _currentIndex;
-
-//setters
+  
   set selectCountry(Country country) {
     _country = country;
     notifyListeners();

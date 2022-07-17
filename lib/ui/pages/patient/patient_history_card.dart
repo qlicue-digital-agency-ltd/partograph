@@ -125,7 +125,7 @@ class PatientHistoryCard extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  mother.nextOfKin,
+                  mother.nextOfKin ?? '',
                   softWrap: true,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -143,7 +143,7 @@ class PatientHistoryCard extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  mother.cellPhone,
+                  mother.cellPhone ?? '',
                   softWrap: true,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

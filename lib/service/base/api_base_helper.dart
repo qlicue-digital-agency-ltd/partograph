@@ -18,7 +18,7 @@ class ApiBaseHelper {
     return responseJson;
   }
 
-    Future<dynamic> deleteData(String url) async {
+  Future<dynamic> deleteData(String url) async {
     dynamic responseJson;
     try {
       Response response = await delete(Uri.parse(partographServerAPI + url));
@@ -66,6 +66,7 @@ class ApiBaseHelper {
   }
 
   dynamic _returnResponse(Response response) {
+    print(response.body);
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body);

@@ -1,53 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:partograph/model/mother.dart';
 import 'package:partograph/provider/utility_provider.dart';
+import 'package:partograph/ui/forms/antenatal_clinic_findings_form.dart';
+import 'package:partograph/ui/forms/current_labor_history_form.dart';
+import 'package:partograph/ui/forms/general_examination_form.dart';
+import 'package:partograph/ui/forms/vaginal_examination_form.dart';
 import 'package:partograph/ui/pages/mother/info/obstetric_history_screen.dart';
 import 'package:partograph/ui/pages/mother/info/admission_information_screen.dart';
 import 'package:provider/provider.dart';
 
 class PartographInfoPage extends StatefulWidget {
+  const PartographInfoPage(
+      {Key? key, this.isTuitorial = false, required this.mother})
+      : super(key: key);
+
   final Mother mother;
-  const PartographInfoPage({
-    Key? key,
-    this.isTuitorial = false,
-    required this.mother,
-  }) : super(key: key);
   final bool isTuitorial;
   @override
   State<PartographInfoPage> createState() => _PartographInfoPageState();
 }
 
 class _PartographInfoPageState extends State<PartographInfoPage> {
+  List<Widget> _screens = [];
+
+  final List<String> _screenTitles = [
+    "ADMISSION INFORMATION",
+    "OBSTETRIC HISTORY",
+    "ANTENATAL CLINIC FINDINGS",
+    "CURRENT LABOUR (HISTORY)",
+    "INITIAL EXAMINATION (GENERAL EXAMINATION)",
+    "INITIAL EXAMINATION (VAGINAL EXAMINATION)"
+  ];
+
   @override
-  Widget build(BuildContext context) {
-    final _utilityProvider = Provider.of<UtilityProvider>(context);
-    final List<Widget> _screens = [
+  void initState() {
+    _screens = [
       AdmissionInformationScreen(
         mother: widget.mother,
       ),
       const ObstetricHistoryScreen(),
-      AdmissionInformationScreen(
-        mother: widget.mother,
-      ),
-      AdmissionInformationScreen(
-        mother: widget.mother,
-      ),
-      AdmissionInformationScreen(
-        mother: widget.mother,
-      ),
-      AdmissionInformationScreen(
-        mother: widget.mother,
-      )
+      const AntenatalClinicFindingsForm(),
+      const CurrentLaborHistoryForm(),
+      const GeneralExaminationForm(),
+      const VaginalExaminationForm()
     ];
 
-    final List<String> _screenTitles = [
-      "ADMISSION INFORMATION",
-      "OBSTETRIC HISTORY",
-      "CURRENT PREGNANCY",
-      "CURRENT PREGNANCY",
-      "INITIAL EXAMINATION",
-      "INITIAL EXAMINATION"
-    ];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _utilityProvider = Provider.of<UtilityProvider>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text(_screenTitles[_utilityProvider.currentIndex]),
@@ -55,7 +59,8 @@ class _PartographInfoPageState extends State<PartographInfoPage> {
         body: Container(
           padding: const EdgeInsets.only(bottom: 80),
           child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            // physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (index) {
               _utilityProvider.currentIndex = index;
             },
@@ -82,7 +87,8 @@ class _PartographInfoPageState extends State<PartographInfoPage> {
                 child: const Text(
                   "Start Partograph",
                   style: TextStyle(fontSize: 24),
-                ))
+                ),
+              )
             : Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 height: 80,
@@ -90,8 +96,9 @@ class _PartographInfoPageState extends State<PartographInfoPage> {
                   children: [
                     const Spacer(),
                     Center(
-                        child: Text(
-                            '${_utilityProvider.currentIndex + 1} / ${_screens.length}')),
+                      child: Text(
+                          '${_utilityProvider.currentIndex + 1} / ${_screens.length}'),
+                    ),
                     const Spacer()
                   ],
                 ),

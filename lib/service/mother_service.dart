@@ -1,9 +1,13 @@
 import 'dart:convert';
 
 import 'package:partograph/model/admission_informations.dart';
+import 'package:partograph/model/antenatal_clinic_finding.dart';
 import 'package:partograph/model/complication.dart';
+import 'package:partograph/model/current_labour_history.dart';
+import 'package:partograph/model/general_examination.dart';
 import 'package:partograph/model/mother.dart';
 import 'package:partograph/model/obstetric_history.dart';
+import 'package:partograph/model/vaginal_examination.dart';
 import 'package:partograph/service/base/api_base_helper.dart';
 import 'package:partograph/service/responses/admin_info_response.dart';
 import 'package:partograph/service/responses/complication_response.dart';
@@ -84,6 +88,46 @@ class MotherServer {
     } finally {}
 
     return _message;
+  }
+
+  Future<dynamic> postAntenatalClinicFinding(
+      {required AntenatalClinicFinding antenatalClinicFinding,
+      required int admissionInfoId}) async {
+    final response = await _helper.postDataWithReturns(
+        data: jsonEncode(antenatalClinicFinding.toMap()),
+        url: 'aantenatalClinicFinding/$admissionInfoId');
+
+    return response;
+  }
+
+  Future<dynamic> postCurrentlabourHistory(
+      {required CurrentLabourHistory currentLabourHistory,
+      required int admissionInfoId}) async {
+    final response = await _helper.postDataWithReturns(
+        data: jsonEncode(currentLabourHistory.toMap()),
+        url: 'currentLabourHistory/$admissionInfoId');
+
+    return response;
+  }
+
+  Future<dynamic> postGeneralExamination(
+      {required GeneralExamination generalExamination,
+      required int admissionInfoId}) async {
+    final response = await _helper.postDataWithReturns(
+        data: jsonEncode(generalExamination.toMap()),
+        url: 'generalExamination/$admissionInfoId');
+
+    return response;
+  }
+
+  Future<dynamic> postVaginalExamination(
+      {required VaginalExamination vaginalExamination,
+      required int admissionInfoId}) async {
+    final response = await _helper.postDataWithReturns(
+        data: jsonEncode(vaginalExamination.toMap()),
+        url: 'vaginalExamination/$admissionInfoId');
+
+    return response;
   }
 }
 

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:partograph/constants/enum.dart';
 import 'package:partograph/model/admission_informations.dart';
 import 'package:partograph/model/amniotic_fluid.dart';
+import 'package:partograph/model/antenatal_clinic_finding.dart';
 import 'package:partograph/model/blood_pressure.dart';
 import 'package:partograph/model/complication.dart';
+import 'package:partograph/model/current_labour_history.dart';
 import 'package:partograph/model/descent.dart';
 import 'package:partograph/model/dilatation.dart';
 import 'package:partograph/model/drug_iv_fluids.dart';
+import 'package:partograph/model/general_examination.dart';
 import 'package:partograph/model/heart_rate.dart';
 import 'package:partograph/model/mother.dart';
 import 'package:partograph/model/moulding_fetal.dart';
@@ -16,6 +19,7 @@ import 'package:partograph/model/pulse.dart';
 import 'package:partograph/model/temperature.dart';
 import 'package:partograph/model/urine.dart';
 import 'package:partograph/model/uterine_contractions.dart';
+import 'package:partograph/model/vaginal_examination.dart';
 import 'package:partograph/service/heart_rate_service.dart';
 import 'package:partograph/service/mother_service.dart';
 
@@ -68,16 +72,18 @@ class MotherProvider with ChangeNotifier {
   List<Mother> currentPatients(
       {CaseCategory? caseCategory, bool reverse = false}) {
     if (caseCategory != null) {
-      return _motherList
+      List<Mother> caseCategoryMothers = _motherList
           .where((mother) => mother.caseCategory == caseCategory)
           .toList();
+
+      if (reverse) {
+        return caseCategoryMothers.reversed.toList();
+      }
+
+      return caseCategoryMothers;
     }
 
-    if (reverse) {
-      return _motherList.reversed.toList();
-    } else {
-      return _motherList;
-    }
+    return _motherList;
   }
 
   Future<bool> postMother(Mother mother) async {
@@ -311,6 +317,35 @@ class MotherProvider with ChangeNotifier {
       notifyListeners();
     }
     return _complication;
+  }
+
+  Future<void> postAntenatalClinicFinding(
+      AntenatalClinicFinding antenatalClinicFinding,
+      int admissionInfoId) async {
+    await motherServer.postAntenatalClinicFinding(
+        antenatalClinicFinding: antenatalClinicFinding,
+        admissionInfoId: admissionInfoId);
+  }
+
+  Future<void> postCurrentlabourHistory(
+      CurrentLabourHistory currentLabourHistory, int admissionInfoId) async {
+    await motherServer.postCurrentlabourHistory(
+        currentLabourHistory: currentLabourHistory,
+        admissionInfoId: admissionInfoId);
+  }
+
+  Future<void> postGeneralExamination(
+      GeneralExamination generalExamination, int admissionInfoId) async {
+    await motherServer.postGeneralExamination(
+        generalExamination: generalExamination,
+        admissionInfoId: admissionInfoId);
+  }
+
+  Future<void> postVaginalExamination(
+      VaginalExamination vaginalExamination, int admissionInfoId) async {
+    await motherServer.postVaginalExamination(
+        vaginalExamination: vaginalExamination,
+        admissionInfoId: admissionInfoId);
   }
 
   //clear data..

@@ -9,8 +9,8 @@ class Mother {
   String husbandPartnerName;
   String residence;
   String permanentAddress;
-  String nextOfKin;
-  String cellPhone;
+  String? nextOfKin;
+  String? cellPhone;
   CaseCategory caseCategory;
 
   List<AdmissionInformation> admissionInformations;
@@ -41,7 +41,7 @@ class Mother {
       'next_of_kin': nextOfKin,
       'cell_phone': cellPhone,
       'case_category': caseCategory.toString().replaceAll("CaseCategory.", ""),
-      // 'admission_informations': admissionInformations.map((e) => e.toMap() 
+      // 'admission_informations': admissionInformations.map((e) => e.toMap()
       // )
     };
 
@@ -54,7 +54,7 @@ class Mother {
         surname: data["surname"],
         otherNames: data["other_names"],
         dateOfBirth: data["date_of_birth"],
-        husbandPartnerName: data["husband_partner_name"] ?? [],
+        husbandPartnerName: data["husband_partner_name"] ?? '',
         residence: data["residence"],
         permanentAddress: data["permanent_address"],
         nextOfKin: data["next_of_kin"],

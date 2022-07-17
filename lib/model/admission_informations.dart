@@ -1,29 +1,29 @@
 import 'package:partograph/model/partograph.dart';
 
 class AdmissionInformation {
-  String time;
   int id;
-  String nameOfHealthFacility;
-  String hospitalRegNo;
+  String time;
+  String? nameOfHealthFacility;
+  String? hospitalRegNo;
   String dateOfAdmission;
-
   String admittingNurseDoctorName;
   String reasonForReferralOrManagementReceived;
   String dangerSignsAndRiskFactors;
   String adimittedFrom;
   Partograph? partograph;
 
-  AdmissionInformation(
-      {required this.id,
-      required this.time,
-      required this.nameOfHealthFacility,
-      required this.hospitalRegNo,
-      required this.dateOfAdmission,
-      required this.adimittedFrom,
-      required this.admittingNurseDoctorName,
-      required this.reasonForReferralOrManagementReceived,
-      required this.dangerSignsAndRiskFactors,
-      this.partograph});
+  AdmissionInformation({
+    required this.id,
+    required this.time,
+    this.nameOfHealthFacility,
+    this.hospitalRegNo,
+    required this.dateOfAdmission,
+    required this.adimittedFrom,
+    required this.admittingNurseDoctorName,
+    required this.reasonForReferralOrManagementReceived,
+    required this.dangerSignsAndRiskFactors,
+    this.partograph,
+  });
 
   Map<dynamic, dynamic> toMap() {
     var map = <String, dynamic>{

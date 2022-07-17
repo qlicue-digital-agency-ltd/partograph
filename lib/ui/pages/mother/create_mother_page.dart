@@ -57,55 +57,64 @@ class _CreateMotherPageState extends State<CreateMotherPage> {
 
   final _phoneFormFieldKey = GlobalKey<FormFieldState>();
 
+  void _onSave() {
+    final _utilityProvider =
+        Provider.of<UtilityProvider>(context, listen: false);
+    final _motherProvider = Provider.of<MotherProvider>(context, listen: false);
+
+    if (_formKey.currentState!.validate()) {
+      final _mother = Mother(
+        id: 0,
+        surname: _surnameTextEditingController.text,
+        otherNames: _otherNamesTextEditingController.text,
+        dateOfBirth: _dateOfBirthTextEditingController.text,
+        husbandPartnerName: _husbandPartnerNameTextEditingController.text,
+        residence: _residenceTextEditingController.text,
+        permanentAddress: _permanentAddressTextEditingController.text,
+        nextOfKin: _nextOfKinTextEditingController.text,
+        cellPhone: _utilityProvider.selectedCountry!.phoneCode +
+            _cellPhoneTextEditingController.text
+                .replaceAll('(', '')
+                .replaceAll(')', '')
+                .replaceAll('-', '')
+                .replaceAll(' ', ''),
+        admissionInformations: [],
+        caseCategory: CaseCategory.incoming,
+      );
+      _motherProvider.postMother(_mother).then((value) {
+        if (!value) {
+          _surnameTextEditingController.clear();
+          _categorTextEditingController.clear();
+          //show the snackbar
+          _utilityProvider.showInSnackBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              color: Colors.white,
+              context: context,
+              icon: Icons.check_circle,
+              scaffoldKey: _createPersonalInfoScaffoldKey,
+              title: 'Mother information created sucessfully');
+
+          // refresh mothers list
+          _motherProvider.loadMothers();
+
+          Navigator.pop(context);
+        } else {
+          //show the snackbar
+          _utilityProvider.showInSnackBar(
+              color: Colors.red,
+              backgroundColor: Colors.black,
+              context: context,
+              icon: Icons.error,
+              scaffoldKey: _createPersonalInfoScaffoldKey,
+              title: 'Error while submitting creating');
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     final _utilityProvider = Provider.of<UtilityProvider>(context);
-    void _onSave() {
-      if (_formKey.currentState!.validate()) {
-        final _mother = Mother(
-            id: 0,
-            surname: _surnameTextEditingController.text,
-            otherNames: _otherNamesTextEditingController.text,
-            dateOfBirth: _dateOfBirthTextEditingController.text,
-            husbandPartnerName: _husbandPartnerNameTextEditingController.text,
-            residence: _residenceTextEditingController.text,
-            permanentAddress: _permanentAddressTextEditingController.text,
-            nextOfKin: _nextOfKinTextEditingController.text,
-            cellPhone: _utilityProvider.selectedCountry!.phoneCode +
-                _cellPhoneTextEditingController.text
-                    .replaceAll('(', '')
-                    .replaceAll(')', '')
-                    .replaceAll('-', '')
-                    .replaceAll(' ', ''),
-            admissionInformations: [],
-            caseCategory: CaseCategory.incoming);
-        _motherProvider.postMother(_mother).then((value) {
-          if (!value) {
-            _surnameTextEditingController.clear();
-            _categorTextEditingController.clear();
-            //show the snackbar
-            _utilityProvider.showInSnackBar(
-                backgroundColor: Theme.of(context).primaryColor,
-                color: Colors.white,
-                context: context,
-                icon: Icons.check_circle,
-                scaffoldKey: _createPersonalInfoScaffoldKey,
-                title: 'Mother information created sucessfully');
-            Navigator.pop(context);
-          } else {
-            //show the snackbar
-            _utilityProvider.showInSnackBar(
-                color: Colors.red,
-                backgroundColor: Colors.white,
-                context: context,
-                icon: Icons.error,
-                scaffoldKey: _createPersonalInfoScaffoldKey,
-                title: 'Error while submitting creating');
-          }
-        });
-      }
-    }
 
     return Scaffold(
       key: _createPersonalInfoScaffoldKey,
@@ -247,7 +256,6 @@ class _CreateMotherPageState extends State<CreateMotherPage> {
                       message: "Please enter cell phone number",
                       onCodeChange: (country) {
                         _utilityProvider.selectCountry = country;
-                        
                       },
                       keyboardType: TextInputType.phone,
                       onChange: (val) {},
