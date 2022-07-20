@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:partograph/model/vaginal_examination.dart';
 import 'package:partograph/provider/mother_provider.dart';
 import 'package:partograph/provider/utility_provider.dart';
+import 'package:partograph/ui/widgets/form_submit_button.dart';
 import 'package:partograph/ui/widgets/partograph_form_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -174,6 +175,7 @@ class _VaginalExaminationFormState extends State<VaginalExaminationForm> {
               ),
             ),
             const SizedBox(height: 20),
+            FormSubmitButton(onPressed: save),
           ],
         ),
       ),

@@ -68,6 +68,7 @@ class _CurrentLaborHistoryFormState extends State<CurrentLaborHistoryForm> {
   Widget build(BuildContext context) {
     return PartographFormUi(
       child: Form(
+        key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

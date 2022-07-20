@@ -95,7 +95,7 @@ class MotherServer {
       required int admissionInfoId}) async {
     final response = await _helper.postDataWithReturns(
         data: jsonEncode(antenatalClinicFinding.toMap()),
-        url: 'aantenatalClinicFinding/$admissionInfoId');
+        url: 'antenatalClinicFinding/$admissionInfoId');
 
     return response;
   }
