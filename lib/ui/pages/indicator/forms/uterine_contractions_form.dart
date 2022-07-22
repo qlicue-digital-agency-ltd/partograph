@@ -5,14 +5,23 @@ import 'package:partograph/provider/mother_provider.dart';
 import 'package:partograph/ui/widgets/text_fields/custom_text.dart';
 import 'package:provider/provider.dart';
 
-class UterineContractionsForm extends StatelessWidget {
-  UterineContractionsForm({Key? key, required this.mother}) : super(key: key);
+class UterineContractionsForm extends StatefulWidget {
+  const UterineContractionsForm({Key? key, required this.mother})
+      : super(key: key);
   final Mother mother;
+
+  @override
+  State<UterineContractionsForm> createState() =>
+      _UterineContractionsFormState();
+}
+
+class _UterineContractionsFormState extends State<UterineContractionsForm> {
   final _formKey = GlobalKey<FormState>();
+
   final _uterineContractionsTextEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -47,14 +56,16 @@ class UterineContractionsForm extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      final _motherProvider =
+                          Provider.of<MotherProvider>(context, listen: false);
                       _motherProvider.postUterineContractions(
                           UterineContraction(
-                            time:TimeOfDay.now().toString(),
+                            time: DateTime.now().toUtc().toString(),
                             id: 0,
                             value: int.parse(
                                 _uterineContractionsTextEditingController.text),
                           ),
-                          mother);
+                          widget.mother);
                       Navigator.pop(context);
                     } else {}
                   },
@@ -69,5 +80,11 @@ class UterineContractionsForm extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _uterineContractionsTextEditingController.dispose();
+    super.dispose();
   }
 }

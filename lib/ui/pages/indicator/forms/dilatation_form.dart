@@ -17,29 +17,26 @@ class _DilatationFormState extends State<DilatationForm> {
   int _dilatation = 0;
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: _labourProcessList.length,
-          itemBuilder: (_, index) => RadioListTile<int>(
-            title: Text('${_labourProcessList[index]}'),
-            value: _labourProcessList[index],
-            groupValue: _dilatation,
-            onChanged: (int? value) {
-              setState(() {
-                _dilatation = value!;
-              });
-            },
-          ),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            mainAxisSpacing: 10.0,
-            crossAxisSpacing: 10.0,
-            childAspectRatio: 4.0,
-            crossAxisCount: 2,
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: List.generate(
+                _labourProcessList.length,
+                (index) => RadioListTile<int>(
+                  title: Text('${_labourProcessList[index]}'),
+                  value: _labourProcessList[index],
+                  groupValue: _dilatation,
+                  onChanged: (int? value) {
+                    setState(() {
+                      _dilatation = value!;
+                    });
+                  },
+                ),
+              ),
+            ),
           ),
         ),
         const SizedBox(
@@ -52,9 +49,12 @@ class _DilatationFormState extends State<DilatationForm> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    final _motherProvider =
+                        Provider.of<MotherProvider>(context, listen: false);
+
                     _motherProvider.postDilatation(
                         Dilatation(
-                          time:TimeOfDay.now().toString(),
+                          time: DateTime.now().toUtc().toString(),
                           id: 0,
                           value: _dilatation,
                         ),

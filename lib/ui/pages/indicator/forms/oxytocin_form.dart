@@ -20,7 +20,6 @@ class _OxytocinFormState extends State<OxytocinForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -84,9 +83,12 @@ class _OxytocinFormState extends State<OxytocinForm> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKeyOxytocin.currentState!.validate()) {
+                        final _motherProvider =
+                            Provider.of<MotherProvider>(context, listen: false);
+
                         _motherProvider.postOxytocin(
                             Oxytocin(
-                              time:TimeOfDay.now().toString(),
+                              time: DateTime.now().toUtc().toString(),
                               id: 0,
                               amount: double.parse(
                                   _amountTextEditingController.text),
@@ -109,5 +111,12 @@ class _OxytocinFormState extends State<OxytocinForm> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _amountTextEditingController.dispose();
+    _dropsTextEditingController.dispose();
+    super.dispose();
   }
 }

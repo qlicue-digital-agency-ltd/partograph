@@ -83,13 +83,21 @@ class FetalHeartRateList extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Expanded(
-                            child: Text(
-                                '${_motherProvider.motherList.firstWhere((element) => element == mother).admissionInformations.last.partograph!.heartRate[index].value} ')),
+                          child: Text(
+                              '${_motherProvider.motherList.firstWhere((element) => element == mother).admissionInformations.last.partograph!.heartRate[index].value} '),
+                        ),
                         Expanded(
-                            child: Text(
-                          _motherProvider.motherList.firstWhere((element) => element == mother).admissionInformations.last.partograph!.heartRate[index].time,
-                          textAlign: TextAlign.end,
-                        ))
+                          child: Text(
+                            _motherProvider.motherList
+                                .firstWhere((element) => element == mother)
+                                .admissionInformations
+                                .last
+                                .partograph!
+                                .heartRate[index]
+                                .time,
+                            textAlign: TextAlign.end,
+                          ),
+                        )
                       ],
                     );
                   },
@@ -106,34 +114,35 @@ class FetalHeartRateList extends StatelessWidget {
 
   showDialogForm(context) {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Expanded(child: Text("Fetal Heart Rate")),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            ),
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-            content: FetalHeartRateForm(
-              mother: mother,
-            ),
-          );
-        });
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Expanded(child: Text("Fetal Heart Rate")),
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16))),
+          content: FetalHeartRateForm(
+            mother: mother,
+          ),
+        );
+      },
+    );
   }
 }

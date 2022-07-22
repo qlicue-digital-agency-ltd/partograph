@@ -5,14 +5,21 @@ import 'package:partograph/provider/mother_provider.dart';
 import 'package:partograph/ui/widgets/text_fields/custom_text.dart';
 import 'package:provider/provider.dart';
 
-class FetalHeartRateForm extends StatelessWidget {
-  FetalHeartRateForm({Key? key, required this.mother}) : super(key: key);
+class FetalHeartRateForm extends StatefulWidget {
+  const FetalHeartRateForm({Key? key, required this.mother}) : super(key: key);
   final Mother mother;
+
+  @override
+  State<FetalHeartRateForm> createState() => _FetalHeartRateFormState();
+}
+
+class _FetalHeartRateFormState extends State<FetalHeartRateForm> {
   final _formKey = GlobalKey<FormState>();
+
   final _fetalHeartRateTextEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -33,37 +40,41 @@ class FetalHeartRateForm extends StatelessWidget {
                 icon: Icons.favorite,
                 iconColor: Colors.red,
               ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 60.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _motherProvider.postHeartRate(
-                          HeartRate(
-                            time:DateTime.now().toString(),
-                            id: 0,
-                            value: double.parse(
-                                _fetalHeartRateTextEditingController.text),
-                          ),
-                          mother);
-                      Navigator.pop(context);
-                    } else {
-                      
-                    }
-                  },
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(color: Colors.white),
-                  ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            final _motherProvider = Provider.of<MotherProvider>(
+                                context,
+                                listen: false);
+
+                            _motherProvider.postHeartRate(
+                              HeartRate(
+                                time: DateTime.now().toString(),
+                                id: 0,
+                                value: double.parse(
+                                  _fetalHeartRateTextEditingController.text,
+                                ),
+                              ),
+                              widget.mother,
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -71,5 +82,11 @@ class FetalHeartRateForm extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _fetalHeartRateTextEditingController.dispose();
+    super.dispose();
   }
 }

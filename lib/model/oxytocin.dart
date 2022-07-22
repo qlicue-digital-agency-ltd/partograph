@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 
 class Oxytocin {
   String time;
@@ -14,9 +15,9 @@ class Oxytocin {
   Map<dynamic, dynamic> toMap() {
     var map = <String, dynamic>{
       'id': id,
-      'time': time,
+      'time': DateFormat('y-M-d H:m:s').format(DateTime.parse(time)),
       'drops': drops,
-      'amount':amount
+      'amount': amount
     };
 
     return map;
@@ -24,10 +25,9 @@ class Oxytocin {
 
   factory Oxytocin.fromMap(Map<String, dynamic> data) {
     return Oxytocin(
-      time: data["time"],
-      id: data["id"],
-      drops: data["drops"],
-      amount:data["amount"]
-    );
+        time: data["time"],
+        id: data["id"],
+        drops: data["drops"],
+        amount: data["amount"]);
   }
 }

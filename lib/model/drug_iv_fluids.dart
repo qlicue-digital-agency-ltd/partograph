@@ -1,4 +1,5 @@
- 
+import 'package:intl/intl.dart';
+
 class DrugIvFluid {
   String time;
   int id;
@@ -9,7 +10,7 @@ class DrugIvFluid {
   Map<dynamic, dynamic> toMap() {
     var map = <String, dynamic>{
       'id': id,
-      'time': time,
+      'time': DateFormat('y-M-d H:m:s').format(DateTime.parse(time)),
       'value': value,
     };
 

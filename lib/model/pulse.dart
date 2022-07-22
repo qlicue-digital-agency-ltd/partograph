@@ -1,4 +1,6 @@
  
+import 'package:intl/intl.dart';
+
 class Pulse {
   String time;
   int id;
@@ -9,7 +11,7 @@ class Pulse {
   Map<dynamic, dynamic> toMap() {
     var map = <String, dynamic>{
       'id': id,
-      'time': time,
+      'time': DateFormat('y-M-d H:m:s').format(DateTime.parse(time)),
       'value': value,
     };
 

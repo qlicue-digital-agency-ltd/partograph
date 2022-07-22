@@ -21,7 +21,6 @@ class _BloodPressureFormState extends State<BloodPressureForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -35,39 +34,41 @@ class _BloodPressureFormState extends State<BloodPressureForm> {
                 diastolicFocusNode: FocusNode(),
                 diastolicTextEditingController: _diastolicTextEditingController,
               ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 60.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKeyBP.currentState!.validate()) {
-                      _motherProvider.postBloodPressure(
-                          BloodPressure(
-                            time: TimeOfDay.now().toString(),
-                            id: 0,
-                            systolic:
-                                int.parse(_systolicTextEditingController.text),
-                            diastolic:
-                                int.parse(_diastolicTextEditingController.text),
-                          ),
-                          widget.mother);
-                      Navigator.pop(context);
-                    } else {
-                      
-                    }
-                  },
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(color: Colors.white),
-                  ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKeyBP.currentState!.validate()) {
+                            final _motherProvider = Provider.of<MotherProvider>(
+                                context,
+                                listen: false);
+
+                            _motherProvider.postBloodPressure(
+                                BloodPressure(
+                                  time: DateTime.now().toUtc().toString(),
+                                  id: 0,
+                                  systolic: int.parse(
+                                      _systolicTextEditingController.text),
+                                  diastolic: int.parse(
+                                      _diastolicTextEditingController.text),
+                                ),
+                                widget.mother);
+                            Navigator.pop(context);
+                          } else {}
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -75,5 +76,12 @@ class _BloodPressureFormState extends State<BloodPressureForm> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _systolicTextEditingController.dispose();
+    _diastolicTextEditingController.dispose();
+    super.dispose();
   }
 }

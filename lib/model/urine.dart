@@ -1,4 +1,5 @@
- 
+import 'package:intl/intl.dart';
+
 class Urine {
   String time;
   int id;
@@ -16,10 +17,10 @@ class Urine {
   Map<dynamic, dynamic> toMap() {
     var map = <String, dynamic>{
       'id': id,
-      'time': time,
+      'time': DateFormat('y-M-d H:m:s').format(DateTime.parse(time)),
       'protein': protein,
       'acetone': acetone,
-      'volume':volume
+      'volume': volume
     };
 
     return map;
@@ -27,11 +28,10 @@ class Urine {
 
   factory Urine.fromMap(Map<String, dynamic> data) {
     return Urine(
-      time: data["time"],
-      id: data["id"],
-      protein: data["protein"],
-      acetone: data["acetone"],
-      volume: double.parse(data["volume"].toString())
-    );
+        time: data["time"],
+        id: data["id"],
+        protein: data["protein"],
+        acetone: data["acetone"],
+        volume: double.parse(data["volume"].toString()));
   }
 }

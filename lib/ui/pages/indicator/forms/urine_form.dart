@@ -24,7 +24,6 @@ class _UrineFormState extends State<UrineForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -41,11 +40,9 @@ class _UrineFormState extends State<UrineForm> {
                     )
                   ],
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: urineList.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (_, index) => RadioListTile<Character>(
+                ...List.generate(
+                  urineList.length,
+                  (index) => RadioListTile<Character>(
                     title: Text(urineList[index].title),
                     value: urineList[index],
                     groupValue: _proteins,
@@ -65,11 +62,9 @@ class _UrineFormState extends State<UrineForm> {
                     )
                   ],
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: urineList.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (_, index) => RadioListTile<Character>(
+                ...List.generate(
+                  urineList.length,
+                  (index) => RadioListTile<Character>(
                     title: Text(urineList[index].title),
                     value: urineList[index],
                     groupValue: _acetone,
@@ -115,9 +110,11 @@ class _UrineFormState extends State<UrineForm> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKeyUrine.currentState!.validate()) {
+                        final _motherProvider =
+                            Provider.of<MotherProvider>(context, listen: false);
                         _motherProvider.postUrine(
                             Urine(
-                              time:TimeOfDay.now().toString(),
+                              time: DateTime.now().toUtc().toString(),
                               id: 0,
                               volume: double.parse(
                                   _urineTextEditingController.text),
@@ -126,8 +123,6 @@ class _UrineFormState extends State<UrineForm> {
                             ),
                             widget.mother);
                         Navigator.pop(context);
-                      } else {
-                      
                       }
                     },
                     child: const Text(
@@ -142,5 +137,11 @@ class _UrineFormState extends State<UrineForm> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _urineTextEditingController.dispose();
+    super.dispose();
   }
 }

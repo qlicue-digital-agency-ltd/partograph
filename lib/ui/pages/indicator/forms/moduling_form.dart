@@ -17,16 +17,12 @@ class _ModulingFormState extends State<ModulingForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: moudlingList.length,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (_, index) => RadioListTile<Character>(
+        ...List.generate(
+          moudlingList.length,
+          (index) => RadioListTile<Character>(
             title: Text(moudlingList[index].title),
             value: moudlingList[index],
             groupValue: _moulding,
@@ -47,13 +43,17 @@ class _ModulingFormState extends State<ModulingForm> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    final _motherProvider =
+                        Provider.of<MotherProvider>(context, listen: false);
+
                     _motherProvider.postMoulding(
-                        MouldingFetal(
-                          time:TimeOfDay.now().toString(),
-                          id: 0,
-                          value: _moulding!.value,
-                        ),
-                        widget.mother);
+                      MouldingFetal(
+                        time: TimeOfDay.now().toString(),
+                        id: 0,
+                        value: _moulding!.value,
+                      ),
+                      widget.mother,
+                    );
                     Navigator.pop(context);
                   },
                   child: const Text(

@@ -20,11 +20,9 @@ class _TemperatureFormState extends State<TemperatureForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-       
         Form(
           key: _formKeyTemp,
           child: Column(
@@ -41,35 +39,38 @@ class _TemperatureFormState extends State<TemperatureForm> {
                 icon: Icons.thermostat,
                 iconColor: Colors.cyan,
               ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 60.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKeyTemp.currentState!.validate()) {
-                      _motherProvider.postTemperature(
-                          Temperature(
-                            time:TimeOfDay.now().toString(),
-                            id: 0,
-                            value:
-                                double.parse(_tempTextEditingController.text),
-                          ),
-                          widget.mother);
-                      Navigator.pop(context);
-                    } else {}
-                  },
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(color: Colors.white),
-                  ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKeyTemp.currentState!.validate()) {
+                            final _motherProvider = Provider.of<MotherProvider>(
+                                context,
+                                listen: false);
+                            _motherProvider.postTemperature(
+                                Temperature(
+                                  time: DateTime.now().toUtc().toString(),
+                                  id: 0,
+                                  value: double.parse(
+                                      _tempTextEditingController.text),
+                                ),
+                                widget.mother);
+                            Navigator.pop(context);
+                          } else {}
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -77,5 +78,11 @@ class _TemperatureFormState extends State<TemperatureForm> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _tempTextEditingController.dispose();
+    super.dispose();
   }
 }

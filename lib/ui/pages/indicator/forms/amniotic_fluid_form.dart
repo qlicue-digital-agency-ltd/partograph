@@ -18,7 +18,6 @@ class _AmnioticFuildFormState extends State<AmnioticFuildForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -28,11 +27,9 @@ class _AmnioticFuildFormState extends State<AmnioticFuildForm> {
           const TitledHeader(
             title: "Amniotic fluid",
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: amnioticFuildList.length,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (_, index) => RadioListTile<Character>(
+          ...List.generate(
+            amnioticFuildList.length,
+            (index) => RadioListTile<Character>(
               title: Text(amnioticFuildList[index].title),
               value: amnioticFuildList[index],
               groupValue: _liquior,
@@ -53,13 +50,17 @@ class _AmnioticFuildFormState extends State<AmnioticFuildForm> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
+                      final _motherProvider =
+                          Provider.of<MotherProvider>(context, listen: false);
+
                       _motherProvider.postAmniotiFluid(
-                          AmnioticFluid(
-                            time:TimeOfDay.now().toString(),
-                            id: 0,
-                            value: _liquior!.value,
-                          ),
-                          widget.mother);
+                        AmnioticFluid(
+                          time: TimeOfDay.now().toString(),
+                          id: 0,
+                          value: _liquior!.value,
+                        ),
+                        widget.mother,
+                      );
                       Navigator.pop(context);
                     },
                     child: const Text(

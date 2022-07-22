@@ -204,67 +204,76 @@ class AmnioticFuildList extends StatelessWidget {
 
   amnioticShowDialogForm(context) {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Expanded(child: Text("Amniotic fluid")),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Expanded(child: Text("Amniotic fluid")),
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
             ),
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-            content: AmnioticFuildForm(
-              mother: mother,
-            ),
-          );
-        });
+          ),
+          scrollable: true,
+          content: AmnioticFuildForm(
+            mother: mother,
+          ),
+        );
+      },
+    );
   }
 
   mouldingShowDialogForm(context) {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Expanded(child: Text("Moulding of fetal skull")),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Expanded(child: Text("Moulding of fetal skull")),
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
             ),
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-            content: ModulingForm(
-              mother: mother,
-            ),
-          );
-        });
+          ),
+          content: ModulingForm(
+            mother: mother,
+          ),
+        );
+      },
+    );
   }
 }

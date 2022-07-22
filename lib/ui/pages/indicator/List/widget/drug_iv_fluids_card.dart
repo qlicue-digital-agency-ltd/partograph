@@ -95,34 +95,38 @@ class DrugsIvFluidCard extends StatelessWidget {
 
   drugsShowDialogForm(context) {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Expanded(child: Text("Drugs given & IV fluids")),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Expanded(child: Text("Drugs given & IV fluids")),
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
             ),
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-            content: DrugsIvFluidForm(
-              mother: mother,
-            ),
-          );
-        });
+          ),
+          content: DrugsIvFluidForm(
+            mother: mother,
+          ),
+        );
+      },
+    );
   }
 }

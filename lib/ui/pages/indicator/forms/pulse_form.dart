@@ -19,11 +19,9 @@ class _PulseFormState extends State<PulseForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        
         Form(
           key: _formKeyHR,
           child: Column(
@@ -40,34 +38,38 @@ class _PulseFormState extends State<PulseForm> {
                 icon: Icons.favorite,
                 iconColor: Colors.red,
               ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 60.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKeyHR.currentState!.validate()) {
-                      _motherProvider.postPulse(
-                          Pulse(
-                            time:TimeOfDay.now().toString(),
-                            id: 0,
-                            value: int.parse(_pulseTextEditingController.text),
-                          ),
-                          widget.mother);
-                      Navigator.pop(context);
-                    } else {}
-                  },
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(color: Colors.white),
-                  ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKeyHR.currentState!.validate()) {
+                            final _motherProvider = Provider.of<MotherProvider>(
+                                context,
+                                listen: false);
+                            _motherProvider.postPulse(
+                                Pulse(
+                                  time: DateTime.now().toUtc().toString(),
+                                  id: 0,
+                                  value: int.parse(
+                                      _pulseTextEditingController.text),
+                                ),
+                                widget.mother);
+                            Navigator.pop(context);
+                          } else {}
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -75,5 +77,11 @@ class _PulseFormState extends State<PulseForm> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _pulseTextEditingController.dispose();
+    super.dispose();
   }
 }

@@ -20,8 +20,19 @@ import 'package:partograph/model/temperature.dart';
 import 'package:partograph/model/urine.dart';
 import 'package:partograph/model/uterine_contractions.dart';
 import 'package:partograph/model/vaginal_examination.dart';
+import 'package:partograph/service/amniotic_fluid_service.dart';
+import 'package:partograph/service/blood_pressure_service.dart';
+import 'package:partograph/service/decent_service.dart';
+import 'package:partograph/service/dilation_service.dart';
+import 'package:partograph/service/drug_iv_fluid_service.dart';
 import 'package:partograph/service/heart_rate_service.dart';
 import 'package:partograph/service/mother_service.dart';
+import 'package:partograph/service/moulding_service.dart';
+import 'package:partograph/service/oxytocin_service.dart';
+import 'package:partograph/service/pulse_service.dart';
+import 'package:partograph/service/temperature_service.dart';
+import 'package:partograph/service/urine_service.dart';
+import 'package:partograph/service/uterine_contraction_service.dart';
 
 class MotherProvider with ChangeNotifier {
   List<Mother> _motherList = [];
@@ -111,8 +122,9 @@ class MotherProvider with ChangeNotifier {
     notifyListeners();
     try {
       heartRateServer.postHeartRate(
-          heartRate: heartRate,
-          partographId: mother.admissionInformations.last.partograph!.id);
+        heartRate: heartRate,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
       _motherList
           .firstWhere((element) => element == mother)
           .admissionInformations
@@ -128,125 +140,210 @@ class MotherProvider with ChangeNotifier {
   }
 
   postAmniotiFluid(AmnioticFluid amnioticFluid, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .amnioticFluid
-        .add(amnioticFluid);
-    notifyListeners();
+    try {
+      await amnioticFluidService.postAmnioticFluid(
+        amnioticFluid: amnioticFluid,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .amnioticFluid
+          .add(amnioticFluid);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postMoulding(MouldingFetal mouldingFetal, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .mouldingFetal
-        .add(mouldingFetal);
-    notifyListeners();
+    try {
+      await mouldingService.postMoulding(
+        moulding: mouldingFetal,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .mouldingFetal
+          .add(mouldingFetal);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postDilatation(Dilatation dilatation, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .dilatation
-        .add(dilatation);
-    notifyListeners();
+    try {
+      await dilationService.postDilation(
+        dilatation: dilatation,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .dilatation
+          .add(dilatation);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postDescent(Descent descent, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .descent
-        .add(descent);
-    notifyListeners();
+    try {
+      await descentService.postDescent(
+        descent: descent,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .descent
+          .add(descent);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postUterineContractions(
       UterineContraction uterineContraction, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .uterineContractions
-        .add(uterineContraction);
-    notifyListeners();
+    try {
+      await uterineContractionService.postUterineContraction(
+        uterineContraction: uterineContraction,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .uterineContractions
+          .add(uterineContraction);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postBloodPressure(BloodPressure bloodPressure, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .bloodPressure
-        .add(bloodPressure);
-    notifyListeners();
+    try {
+      await bloodPressureService.postBloodPressure(
+        bloodPressure: bloodPressure,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .bloodPressure
+          .add(bloodPressure);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postPulse(Pulse pulse, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .pulse
-        .add(pulse);
-    notifyListeners();
+    try {
+      pulseService.postPulse(
+        pulse: pulse,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .pulse
+          .add(pulse);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postTemperature(Temperature temperature, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .temperature
-        .add(temperature);
-    notifyListeners();
+    try {
+      temperatureService.postTemperature(
+        temperature: temperature,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .temperature
+          .add(temperature);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postUrine(Urine urine, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .urine
-        .add(urine);
-    notifyListeners();
+    try {
+      await urineService.postUrine(
+        urine: urine,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .urine
+          .add(urine);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postOxytocin(Oxytocin oxytocin, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .oxytocin
-        .add(oxytocin);
-    notifyListeners();
+    try {
+      await oxytocinService.postOxytocin(
+        oxytocin: oxytocin,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .oxytocin
+          .add(oxytocin);
+    } finally {
+      notifyListeners();
+    }
   }
 
   postDrugIvFluids(DrugIvFluid drugIvFluid, Mother mother) async {
-    _motherList
-        .firstWhere((element) => element == mother)
-        .admissionInformations
-        .last
-        .partograph!
-        .drugIvFluid
-        .add(drugIvFluid);
-    notifyListeners();
+    try {
+      await drugIvFluidService.postDrugIvFluid(
+        drugIvFluid: drugIvFluid,
+        partographId: mother.admissionInformations.last.partograph!.id,
+      );
+      _motherList
+          .firstWhere((element) => element == mother)
+          .admissionInformations
+          .last
+          .partograph!
+          .drugIvFluid
+          .add(drugIvFluid);
+    } finally {
+      notifyListeners();
+    }
   }
 
 //create a new admission

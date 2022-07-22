@@ -19,7 +19,6 @@ class _DrugsIvFluidFormState extends State<DrugsIvFluidForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _motherProvider = Provider.of<MotherProvider>(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -47,7 +46,6 @@ class _DrugsIvFluidFormState extends State<DrugsIvFluidForm> {
                   icon: Icons.local_hospital,
                   iconColor: Colors.red,
                 ),
-                
               ],
             ),
           ),
@@ -62,9 +60,12 @@ class _DrugsIvFluidFormState extends State<DrugsIvFluidForm> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKeyOxytocin.currentState!.validate()) {
+                        final _motherProvider =
+                            Provider.of<MotherProvider>(context, listen: false);
+
                         _motherProvider.postDrugIvFluids(
                             DrugIvFluid(
-                              time:TimeOfDay.now().toString(),
+                              time: DateTime.now().toUtc().toString(),
                               id: 0,
                               value: _descriptionTextEditingController.text,
                             ),
@@ -84,5 +85,11 @@ class _DrugsIvFluidFormState extends State<DrugsIvFluidForm> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _descriptionTextEditingController.dispose();
+    super.dispose();
   }
 }
